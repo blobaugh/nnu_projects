@@ -1,0 +1,49 @@
+/*
+ * Project: BlobMS
+ * Original Author: Ben Lobaugh
+ * Creation Date: 05-15-2007
+ * Description: BlobMS is yet another content management system.
+ *      This project first started for two reasons. The first of
+ *      which is Ben wished to tinker and figure out how CMSs
+ *      work, and the second comes out of paranoia. Ben has a
+ *      suspicious nature when it comes to using other's software,
+ *      and by building it himself he knows there are no backdoors
+ *      and his information is safe.
+ *
+ * Contributors:
+ *      Joe Oppegaard - joe@radiojoe.org
+ *      Justin Palmer - justin@cetusa.org
+ *      Kevin Nelson - knelson@blamdesigns.com
+ *      All the guys on IRC at irc.freenode.net#linuxn00b
+ */
+
+
+ ## TO DO ##
+ Create a custom error handler for logging errors on live in core/Bootstrap.php
+ Fill in site_sanity_check in core/global_functions
+ Change the Template to use a smarty property, instead of extending
+ Implement mootools
+ Bring Encryption class into line with current coding guidelines
+ Roll find_file() in global_functions into some sort of object that holds an index of class files to speed up autoloading
+ Add db load balancing. See app/Settings.php for more info
+ Have the Registry object return NULL on not found value
+ Create Module class
+        should contain a link to $Tpl and $Db
+        all modules will extend this somehow
+
+ ## INTRODUCTION ##
+ BlobMS is designed to be an easy to use, and easy to develop Content Management System. The overarching goal is to create a system that anyone, whether developer or end user, can easily setup and get running with a minimal amount of effort, but that is still powerful enough to provide extensive customization for developers that need more than the basic package.
+
+
+ ## MAIN DIRECTORY STRUCTURE ##
+ Settings.php is required to be in /app
+
+ ## DATABASE INFORMATION ##
+ A unique and effecient database connector is provided. In order to use this connector database tables are required to have fields 'Updated' and 'Created' as type 'DATETIME'. The connector will automagically fill in values for these fields.
+
+ ## USEFUL FUNCTIONS ##
+ throw_fatal_error($error_message) - Send it a message before any display and it will display a formatted error then exit the script
+
+ ## MAGICALLY INCLUDED APP FILES ##
+ /app/lib/common_functions.php
+ /app/Include.php

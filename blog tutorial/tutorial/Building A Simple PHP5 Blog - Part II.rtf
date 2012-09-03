@@ -1,0 +1,88 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf330
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww17860\viewh14700\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 Building a simple blogging system in PHP5 - Part II - File structure and Database Access\
+\
+In part I of this tutorial we brainstormed what we want our blog to do, and we setup a MySql database to hold all the data for our blog. You should have created a user to gain access to your blog. I am going to be using user myblog with a password myblogpassword. Anywhere you see that used substitute it with your database credentials.\
+\
+We now need to build a file structure for our site. It is important to define the file structure at this point because it is how the user will use URIs. Keep in mind that in front of these will be your domain. E.G. http://mydomain.com/blobaugh.\
+\
+/ - all posts\
+/username - specific user's posts\
+/username/post - a single post from a user\
+/username/post/form - add or edit a single post\
+/username/latest - a user's posts since last login\
+/latest - all posts since last login\
+/core - everything that will help with the site we do not want users to see\
+\
+\
+Using this structure will provide us with a great and simple starting place and give us an idea of how our content will be spread around the site. We may expand upon this later, but for now it will suffice.\
+\
+Let's talk about what I consider a common failing point of most programmers, and one which I am still trying to improve upon myself, the entry and editing of posts. The majority of people will in their head think add and edit, then proceed to create a file called add, and a file called edit. This is not in and of itself a bad practice, however there is a principle in software development called K.I.S.S., or Keep It Simple Stupid. If this is your first time building a project like this you may not notice, but if you build many projects that have many add/edit forms as I have you will soon learn that it is a real pain in the rear to have separate add and edit pages. Why? Example: You are collecting information on a person for your phonebook and you want their name and phone number. Build the two files. Later you decide that you also want to collect the email address. Edit two files. Now you stop working on the project and some time later a new developer picks it up. The new developer decides to collect the city as well. Hmm...now the new developer has to figure out how many files and where he needs to change.  New developer finds and edits the two files. Management decides they want another department to have a way to add and edit the contacts separate from the current system. New developer builds a new system along with two new add and edit pages. Basically he copied what you created to a new location and slapped a new layout on it. Everything is still happy right? New developer gets a higher paying job somewhere and a newer developer comes in. Management now also wants to be able to store a picture of the contact. Now the newer developer must look through the system for every place that does add or edit. Now four places. Do you see where I am going with this? The complexity of your system increases dramatically. My solution to this is to use one file to do both the add and the edit. And if you ever need to create another add or edit elsewhere you can simply include that one file. Need to add a new field? Simple, open and edit that one file and blam! Change is everywhere. I like this solution and I will show you how I implement it when we get there, however now a new problem presents itself. What do we call this file? It is not totally an add, and it is not totally an edit. Hmm...*scratch head*...*scratch head some more*. Well, I guess since it is a form we could just call it form. Not a very elegant name for it, but it is the best one that I have come up with so far. If you do not like that name though simply call it something else and let me know in case I like it too :D.\
+\
+Well. I guess the place to start would be user creation. From there we will be able to access the user's profile to add posts and such. Before we get there, however, we will need to get ourselves a database connection setup so we can get and put information in it. Luckily PHP includes a very simple method of interfacing with the database. There are other methods of getting a database connection than I am going to show you here, but this one is very simple and should be pretty universally supported. \
+\
+Before we start adding a bunch of files I need to let you know a bit about how I will notate which file to use. I come from the Linux world (as many of you reading this tutorial will as well) and we use forward slashes(/) for directory separators, which is opposite of the Windows backward slash(\\). Also I will be providing the complete path to the file to avoid any confusion as to which file we are working on. In a Linux system there is no drive C: to base everything off. Instead Linux uses a tree structure and every drive is contained within that tree. The root, or beginning, of that tree is specified by a forward slash. So any Windows users reading this can think of / as similar to C:\\ but not quite. Since I do not know where exactly you will be storing your files I am referring to / as the root directory of your webserver. So if you stored your documents in /my/webserver the / will really mean /my/webserver. Enough jabber, let's create a file!\
+\
+I will usually be creating the entire file, then I will dissect the code and tell you about any of the juicy contents, much of which may be in the comments. I will probably only go over a concept once. If it pops up again and you do not remember how it worked or what it does you can refer back.Now is also a good time to let you know of the amazing resource contained at php.net. If there is a particular function you are interested in you can put it in the URI of php.net and it will take you right to the definition. For example, to replace an element in a string you would use str_replace. If you want to know more information about how str_replace works simply point your browser to php.net/str_replace and you will have the function definition in full living color.\
+\
+And finally...the first real code!\
+This file will be /core/session_manager.php\
+\
+<?php\
+/******************************************************\
+* Programmer: Ben Lobaugh (ben <AT> regexninja <DOT> com)\
+* File: session_manager.php\
+* Site: \
+* Creation Date: 12-31-2008\
+* Modified Date: 12-31-2008\
+* Description: Sets up much of the behind the scenes\
+*	functionality of the site that users never see\
+******************************************************/\
+\
+// Startup the session\
+session_start();\
+\
+/*\
+* Setup some constants we will be able to use anywhere\
+* in our system. If anything changes it is much simpler to \
+* change a constant than it is to find every place that piece\
+* of data was used and change it.\
+*/\
+\
+// Database connection info\
+define('DB_USER', 'myblog');\
+define('DB_PASSWORD', ' myblogpassword');\
+define('DB_DB', 'blog'); // This is the name of the database\
+define('DB_LOCATION', 'localhost'); // Server the database resides on\
+\
+// Database tables\
+define('DB_TBL_USERS', 'Users');\
+define('DB_TBL_COMMENTS', 'Comments');\
+define('DB_TBL_POSTS', 'Posts');\
+\
+/*\
+* Create a database connection. \
+*\
+* If the database connection fails then the site should\
+* panic and die. If there is no connection to the database\
+* what would be the point of continuing?\
+*/\
+// Connect to database server \
+$Db = mysql_connect(DB_LOCATION, DB_USER, DB_PASSWORD) or die('Could not connect to server');\
+// Connect to database\
+if(!mysql_select_db(DB_DB, $Db)) \{\
+	die('Could not select database');\
+\}\
+?>\
+\
+What we have so far is a session, which is not needed now, but we will be using a lot later, and a connection to the database with which we can get and put data. The next section of this tutorial will deal with registering users and creating an authentication(login) system.\
+\
+\
+\
+\
+\
+}

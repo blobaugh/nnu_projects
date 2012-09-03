@@ -1,0 +1,50 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf330
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww15320\viewh11200\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 Building a simple blogging system in PHP5 - Part III - User Registration and Authentication\
+\
+In the previous sections we brainstormed what we want out blogging system to do, what sort of database structure we want, our file structure, and finally connected PHP with the database. In this section we will be creating a user registration form which will take in a username in the form of an email address and a password. It is a very simple setup, then we will create the authentication and login mechanisms to secure user's posts. This will not be a complex system, and probably should not be used in production without some securing, but it will get you the ideas behind what you need to secure your users. Let's begin.\
+\
+\
+We need some sort of form to add a new user. This will be called register.php. Initially all we will need from the user is to specify a username, which will be their email address, and a password. The form will then post back to itself and the page will 'magically' figure out if it needs to show the form, errors, or register a user. We will be doing a lot of manual labor on thse pages. Many things that seasoned web developers will gasp t. However, this tutorial is aimed more at beginning programmers and using these methods will get you more familiar with them by repetition. Later, as you progress as a developer, you will find better methods that will ease this load. If you continue on to the more advanced blog building tutorial you will find several of those methods for you already built.\
+\
+This file will be /register.php\
+\
+<?php\
+/******************************************************\
+* Programmer: Ben Lobaugh (ben <AT> regexninja <DOT> com)\
+* File: register.php\
+* Site: \
+* Creation Date: 12-31-2008\
+* Modified Date: 12-31-2008\
+* Description:  Handles the registration of new users.\
+******************************************************/\
+\
+// The session manager must be included on EVERY page\
+require_once("/core/session_manager.php");\
+\
+\
+/*\
+* Check to see if the user posted anything. \
+*\
+* If the user posted something we need to check and make sure\
+* all of the form elements are there, and if so that they contain\
+* data in the correct format for our system.\
+*/\
+if(isset($_POST['btnSave'])) \{\
+	$error = ''; // Hold any form errors\
+\
+	// The user has posted something check it\
+	if(isset($_POST['username']) && isset($_POST['password'])) \{\
+		// All the elements we need have been posted. We can create a new user\
+		\
+	\} else \{\
+		// The user missed something. We need to show them the form again\
+		// with the error.\
+	\}\
+\}\
+\
+}

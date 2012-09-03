@@ -1,0 +1,48 @@
+/****************************************
+*************** SITE.CSS ****************
+*
+* Created by: Ben Lobaugh
+* Contact: ben <AT> lobaugh <DOT> net
+* Created on: 04-25-2007
+* 
+* Use: Feel free to use this css as you
+*   will. I request only you keep the
+*   original credit in place.
+*
+* Please note: This file is where custom
+*   site tags are defined. All layout is
+*   done in layout.css
+*
+* Code for the **body** tag is also 
+*   found in layout.css
+*
+****************************************/
+
+
+/** Grab the layout **/
+@import url(layout.css);
+
+/*** Page Options ***/
+body {
+	font-family:verdana, arial, helvetica, sans-serif;
+}
+
+table {
+        border: 1px solid #000000;
+}
+
+table th {
+        background-color: #CCCCCC;
+}
+
+table tr.rowa {
+        background-color: #f1f5fa;
+}
+
+table tr.rowb {
+        background-color: #FFFFFF;
+}
+
+table tr.rowa:hover, table tr.rowb:hover {
+        background-color:#fcc;
+}

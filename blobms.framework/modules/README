@@ -1,0 +1,9 @@
+This folder will contain predefined code that can be used in the application. The client will not be allowed to change this code, however the client can overload the code provided to provide additional functionality.
+
+Sample templates may also be provided for the developer if chosen
+
+
+Structure
+        module_name/
+                schema.sql
+                other stuff

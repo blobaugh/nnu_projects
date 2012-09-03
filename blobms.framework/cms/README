@@ -1,0 +1,5 @@
+This folder will contain all the elements needed for the content management portion of blobms
+
+This folder will have it's own css, controllers, views, js, etc
+
+The goal is for this section to stand on it's own as much as possible. Obviously libraries from the core will be available, as will libraries from the modules, and if needed, the application itself

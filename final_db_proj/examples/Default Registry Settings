@@ -1,0 +1,20 @@
+Registry settings always available to you
+
+		// Paths - PLEASE APPEND WITH /
+		$this->Set('path_library', 'lib/');
+		$this->Set('path_includes' , 'includes/');
+		$this->Set('path_controllers', 'controllers/');
+		$this->Set('path_views', 'views/'); // Smarty needs this
+		$this->Set('path_cache', 'cache/'); // Smarty needs this
+		
+		// Smarty Specific
+		$this->Set('smarty_cache_enabled', true);
+		$this->Set('smarty_cache_life', 3600); // 1 hour in seconds
+		$this->Set('smarty_debugging', false);
+		
+		// Http links
+		$this->Set('http_link', 'http://' . $_SERVER['SERVER_NAME'] . '/');
+		$this->Set('http_images', 'images/');
+		
+		// Misc
+		$this->Set('default_controller', 'home'); // Default controller

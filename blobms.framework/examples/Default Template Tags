@@ -1,0 +1,9 @@
+These template tags are always available to you in smarty
+
+{$http_link} - Link to your document root. Useful for creating links and finding css files
+{$http_images} - Link to the main images folder
+
+
+The following tags need to be implemented in your template somewhere to work. There is functionality in the Template class to use them right now
+
+{$tplHead} - Add additional content between the <head> tags. Template->AddHead($string)

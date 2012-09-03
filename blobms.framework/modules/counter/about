@@ -1,0 +1,8 @@
+this IS NOT an individual page hit counter. for that check out the visitor stats
+
+this module holds several counters. new counters can be created for just about anything you feel needs a good counting
+
+
+methods
+        inc_count(counter, how_much=1)
+                if counter does not exist a new one will be created

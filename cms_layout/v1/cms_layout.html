@@ -1,0 +1,103 @@
+<html>
+<head>
+	<title>cms layout</title>
+	<script src="jquery-1.3.2.min.js" type="text/javascript"></script>
+	
+	<script src="jquery.treeview.min.js" type="text/javascript"></script>
+	<script src="jquery.cookie.js" type="text/javascript"></script>
+	
+	
+   
+	<link rel="stylesheet" href="cms-layout.css" />
+	<link rel="stylesheet" href="jquery.treeview.css" />
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#browser").treeview(); 
+		});
+	</script>
+	
+
+<style type="text/css">
+	
+</style>
+</head>
+<body>
+
+	<div class="cms-layout-head">
+		<div class="cms-layout-head-sitename">[L] Site Name</div>
+		<div class="cms-layout-head-user"><span id="user_info">(Quick Links) Welcome <img src="images/user_gray.png" align="middle"> Ben Lobaugh</span> | Logout</div>
+	</div>
+
+	<div class="cms-layout-content-wrap">
+		<div class="cms-layout-content-menu">
+			<div class="cms-layout-menu-block">
+				<div class="cms-layout-menu-item">Dashboard</div>
+				<div class="cms-layout-menu-sub">Statistics</div>	
+			</div>
+
+			<div class="cms-layout-menu-block">
+				<div class="cms-layout-menu-item">Pages</div>
+				<div class="cms-layout-menu-item">Blog</div>
+				<div class="cms-layout-menu-item">Content</div>
+				<div class="cms-layout-menu-item">Media</div>
+				<div class="cms-layout-menu-item">Comments</div>
+				
+			</div>
+
+			<div class="cms-layout-menu-block">
+				<div class="cms-layout-menu-item">Preferences</div>
+				<div class="cms-layout-menu-sub">Change Password</div>
+				<div class="cms-layout-menu-item">Tasks</div>
+				<div class="cms-layout-menu-sub">New Task</div>
+				<div class="cms-layout-menu-item">Chat</div>
+			</div>
+			
+			<div class="cms-layout-menu-block">
+				<div class="cms-layout-menu-item">System</div>
+				<div class="cms-layout-menu-sub">Users</div>
+				<div class="cms-layout-menu-sub">Settings</div>
+			</div>
+		</div>
+		<div class="cms-layout-content-content">
+			
+			
+			<ul id="browser" class="filetree">
+					<div class="bar">Hide <img src="images/resultset_previous.png" align=middle></div>
+					<li><span class="folder">Folder 1</span>
+						<ul>
+
+							<li><span class="file">Item 1.1</span></li>
+						</ul>
+					</li>
+					<li><span class="folder">Folder 2</span>
+						<ul>
+							<li><span class="folder">Subfolder 2.1</span>
+								<ul id="folder21">
+
+									<li><span class="file">File 2.1.1</span></li>
+									<li><span class="file">File 2.1.2</span></li>
+								</ul>
+							</li>
+							<li><span class="file">File 2.2</span></li>
+						</ul>
+					</li>
+
+					<li class="closed"><span class="folder">Folder 3 (closed at start)</span>
+						<ul>
+							<li><span class="file">File 3.1</span></li>
+						</ul>
+					</li>
+					<li><span class="file">File 4</span></li>
+				</ul>
+			
+			<div class="cms-layout-real-content">bleah</div>
+			
+		</div>	
+	</div>
+
+	<div class="cms-layout-foot">Foot, thanks for using</div>
+
+
+</body>
+</html>

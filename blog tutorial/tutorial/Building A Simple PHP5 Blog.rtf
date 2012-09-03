@@ -1,0 +1,116 @@
+{\rtf1\ansi\ansicpg1252\cocoartf949\cocoasubrtf330
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww11000\viewh12500\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 Build a simple blogging system in PHP5 - Part I - Brainstorming and Data structure\
+\
+This tutorial assumes a moderate assumption of PHP and MySql knowledge. Not a ton, but enough to be able to read and with a reference figure out what the code is doing.\
+\
+Before even begin touching code we need to figure out what our blog is going to do and how it will do it. Let's start by jotting down some rough ideas that we might implement.\
+\
+We need to be able to post our content (Duh).\
+Anyone can sign up to post content or commments.\
+We need a user authentication system to protect posts and prevent bots from commenting.\
+Each post should be able to have unlimited number of comments\
+Comments should be able to be disabled on a per post basis\
+Post may be public or private\
+Public users should be able to view all posts together, or posts only from a specific user\
+Post authors should be able to login and view all their posts, as well as comments specific to their posts.\
+Post authors should be able to see new comments since their last login\
+Logged in users should be able to see all new posts since their last login\
+Post authors should be able to edit their own posts\
+\
+At first glance this may sound like an intimidating list, however it is really just a few conditional checks and should not take too long to get up an running, but it will provide some powerful functionality.\
+\
+Now that we have some ideas on how our system will operate we need to start thinking about how to store all this information. MySql databases are fast, reliable, easy to setup, and free so that is what we shall use here.\
+\
+Based on our information above I see three main areas to consider when we build our database. Users, posts, and comments. The posts and comments should always link to a user, and the comments should always link to a post. A decent database structure would probably look something like this\
+\
+Users Table\
+UserId\
+Nickname\
+Username\
+Password\
+JoinDate\
+LastLogin\
+\
+Posts Table\
+PostId\
+UserId\
+AllowComments\
+Public\
+Subject\
+Post\
+PostDate\
+\
+Comments Table\
+CommentId\
+UserId\
+PostId\
+Comment\
+CommentDate\
+\
+A database holds tables of information. Databases are arranged in a series of tables that contain rows, or records, of data. You can think of it like a backpack being a database. Inside of that backpack are several books. Each book is like a table, and each page in a book is like a record. Let's break each of these tables down:\
+\
+Users Table\
+UserId is a unique numeric identifier each user has. This identifier is important because it allow us to know who a post or comment belongs to.\
+Nickname is the name that will display on the post or comment when someone views it.\
+Username is the username that a user will use to get access to the system. We need to make sure that a user by that name does not already exist when creating a new user.\
+Password is the secret key a user uses to prove their identity to our blog system.\
+JoinDate contains the date the user first created the account on.\
+LastLogin contains the date when the user last logged in. This is useful for comparing to the dates of posts and comments to see if there is anything new.\
+\
+Posts Table\
+PostId is a unique numeric identifier that each post has. This identifier allows us to link a comment with a post.\
+UserId is the user id of the author of the post. Using the UserId we can look into the Users table and find the Nickname of the user.\
+AllowComments is simply a true/false value that indicates whether or not a post can have comments added to it.\
+Public is a true/false value that indicates whether the general public can view the post, or only the post author.\
+Subject is the subject line of the post. This is analogous to a subject in an email.\
+Post contains the actual data that the user posted.\
+PostDate is the date when the post was created. This is useful when determining which posts have been created since a users last login.\
+\
+Comments Table\
+CommentId is a unique numeric identifier that each comment has.\
+UserId is the user id of the author of the comment. Using the UserId we can look into the Users table and find the Nickname of the user.\
+PostId is the post id of a post. Using the PostId we can link a post to it's comments so they are all displayed on one page.\
+Comment contains the text for the comment.\
+CommentDate is the date the comment was created. This is useful when determining which comments have been created since a users last login.\
+\
+Now we have some idea of what our blog with be doing, and we know what sort of data we will be storing. Let's build the database so that we will have a place to store and test data when we begin our PHP programming. Login to whatever program you use to interface with MySql. I tend to use the command line mysql client, however as long as your program allows you to run queries (why it would not I have no idea) you will be fine. The final query sets up a user for your blog. Be sure that you supply your own username and password there. It does not matter what username or password you use, you are creating a new user. Here are the queries you will need:\
+\
+CREATE DATABASE `blog`\
+\
+CREATE TABLE Users (\
+  `UserId` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique User Identifier',\
+  `Nickname` VARCHAR(100) NOT NULL COMMENT 'Public Display Name',\
+  `Username` VARCHAR(100) NOT NULL COMMENT 'Username to login',\
+  `Password` VARCHAR(100) NOT NULL COMMENT 'Private authentication key',\
+  `JoinDate` DATETIME NOT NULL COMMENT 'User account creation date and time',\
+  `LastLogin` DATETIME COMMENT 'Last login date and time'\
+) COMMENT 'User authentication and information'\
+\
+CREATE TABLE Posts (\
+  `PostId` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique Post Identifier',\
+  `UserId` INT(11) NOT NULL COMMENT 'Link to user in Users table',\
+  `AllowComments` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Boolean to allow comments or not',\
+  `Public` TINYINT(1) NOT NULL DEFAULT '1' COMMENT 'Boolean to show post to everyone or not',\
+  `Subject` VARCHAR(255) NOT NULL COMMENT 'Subject of the post',\
+  `Post` TEXT NOT NULL COMMENT 'Body of the Post',\
+  `PostDate` DATETIME NOT NULL COMMENT 'Date and time of the post creation'\
+) COMMENT 'Holds all posts by users'\
+\
+CREATE TABLE Comments (\
+  `CommentId` INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Unique Comment Identifier',\
+  `UserId` INT (11) NOT NULL COMMENT 'Link to user in Users table',\
+  `PostId` INT(11) NOT NULL COMMENT 'Link to comment in Comment table',\
+  `Comment` TEXT NOT NULL COMMENT 'Body of the comment',\
+  `CommentDate` DATETIME NOT NULL COMMENT 'Date and time the comment was posted'\
+) COMMENT 'Holds comments to all posts with links to users'\
+\
+GRANT ALL ON blog.* to 'Insert_Your_Username_Here'@'localhost' IDENTIFIED BY 'Insert_Your_Password_Here'\
+\
+\
+We now have the ideas about how we want our blog system to function and a place to store all the information. In the next part of this tutorial we will setup the file structure for our blog, and learn how to interface PHP with the MySql database so we can store and get data.\
+}
